@@ -1,0 +1,15 @@
+[webservers]
+
+
+
+[dbservers]
+
+
+[datacenter:children]
+webservers
+dbservers
+
+[datacenter:vars]
+ansible_ssh_user=user1
+ansible_ssh_pass=Welcome@1234
+ansible_sudo_pass=Welcome@1234
