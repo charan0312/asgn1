@@ -17,8 +17,8 @@ print instances
 
 ip_str1 = '\n'.join(instances)
 ip_str2 = ','.join(instances)
-print ip_str
-
+print ip_str1
+print ip_str2
 
 
 import fileinput
@@ -30,8 +30,14 @@ def replace(file,searchExp,replaceExp):
 			line = line.replace(searchExp,replaceExp)
 		sys.stdout.write(line)
 
-replace("./inventory", "[webservers]", "[webservers]" + "\n" + ip_str)
+replace("./inventory", "[webservers]", "[webservers]" + "\n" + ip_str1)
 
+
+import subprocess
+
+subprocess.call(['fab','-i','abcd.pem','-H',ip_str2,'user_create'])
+subprocess.call(['fab','-i','abcd.pem','-H',ip_str2,'user_sudoer'])
+subprocess.call(['fab','-i','abcd.pem','-H',ip_str2,'start_ssh'])
 
 
 
