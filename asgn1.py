@@ -34,6 +34,9 @@ replace("./inventory", "[webservers]", "[webservers]" + "\n" + ip_str1)
 
 
 import subprocess
+subprocess.call(['sudo','yum','install','wget','-y'])
+subprocess.call(['sudo','yum','install','fabric','-y'])
+subprocess.call(['sudo','yum','install','ansible','-y'])
 
 subprocess.call(['fab','-i','abcd.pem','-H',ip_str2,'user_create'])
 subprocess.call(['fab','-i','abcd.pem','-H',ip_str2,'user_sudoer'])
