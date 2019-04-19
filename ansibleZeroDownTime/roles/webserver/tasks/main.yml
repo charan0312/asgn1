@@ -1,0 +1,10 @@
+---
+
+- name: Check  Apache installation
+  yum: name=httpd state=present
+
+- name: Start Apache
+  service: name=httpd state=started enabled=yes
+
+- name: Stop iptables
+  service: name=iptables state=stopped

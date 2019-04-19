@@ -1,0 +1,8 @@
+[webservers]
+
+
+[webservers:vars]
+ansible_ssh_user=user1
+ansible_ssh_pass=hello@123
+ansible_sudo_pass=hello@123
+

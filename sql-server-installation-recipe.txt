@@ -1,0 +1,51 @@
+#
+# Cookbook Name:: sql
+# Recipe:: default
+#
+# Copyright (c) 2016 The Authors, All Rights Reserved.
+
+
+dsc_script 'os config' do
+  code <<-EOH
+  Script config_os{
+    GetScript = {  }
+    SetScript = {
+	$newName = "Admin"
+	$oldName = "Administrator"
+	$user = Get-WMIObject Win32_UserAccount -Filter "Name='$oldName'"
+	$result = $user.Rename($newName)
+	$NewPassword = "Welcome@1234"
+	$user = [ADSI]"WinNT://./$env:Username,user"
+	$user.setpassword($NewPassword)
+	$name = "Charan"	#Read-Host -Prompt "Please Enter the MachineName you want to use."
+	$computerName = Get-WmiObject Win32_ComputerSystem
+	$computerName.Rename($name)
+    }
+    TestScript={
+      $false
+        }
+  }
+  EOH
+end
+
+
+dsc_script 'install sql-server' do
+  code <<-EOH
+  Script installsql-server{
+    GetScript = {  }
+    SetScript = {
+      $source = "https://download.microsoft.com/download/4/C/7/4C7D40B9-BCF8-4F8A-9E76-06E9B92FE5AE/ENU/SQLFULL_ENU.iso"
+      $destination = "C:\\SQLFULL_ENU.iso"
+      $passwd = "&x23!?@e4p"
+      Invoke-WebRequest $source -OutFile $destination
+      Mount-DiskImage -ImagePath $destination
+      cd D:\
+      .\setup.exe /q /ACTION=Install /FEATURES=SQL,Tools /INSTANCENAME=MSSQLSERVER /SECURITYMODE=SQL /SAPWD="Welcome@1234" /SQLSVCACCOUNT="Administrator" /SQLSVCPASSWORD=$passwd /SQLSYSADMINACCOUNTS="Administrator" /AGTSVCACCOUNT="NT AUTHORITY\Network Service" /IACCEPTSQLSERVERLICENSETERMS /UpdateEnabled /IndicateProgress
+    }
+    TestScript = {
+
+      Get-WmiObject -Class Win32_Product | sort-object Name | select Name,Version  | where { $_.Name -like "*SQL*" }
+    }
+  }
+  EOH
+end

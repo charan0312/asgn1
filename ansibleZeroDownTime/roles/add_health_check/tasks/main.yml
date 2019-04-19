@@ -1,0 +1,7 @@
+---
+
+- name: Adding index.html
+  template: src=index.j2 dest=/var/www/html/index.html
+
+- name: Adding health_check.j2
+  file: path=/var/www/html/health_check.html state=touch 

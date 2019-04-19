@@ -1,0 +1,3 @@
+---
+- name: Remove health_check
+  file: path=/var/www/html/health_check.html state=absent
